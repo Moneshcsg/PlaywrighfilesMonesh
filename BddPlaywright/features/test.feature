@@ -1,5 +1,4 @@
 @smoke
-Feature: Adaptive Form
-Scenario: signin with CRED
-Then Login
-Then Credential
+Feature: Procurement Automation
+Scenario: Singin scenario
+Then: Login

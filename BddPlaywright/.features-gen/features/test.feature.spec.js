@@ -1,12 +1,9 @@
 /** Generated from: features\test.feature */
-import { test } from "../../steps/fixtures/fixture.ts";
+import { test } from "playwright-bdd";
 
-test.describe("Adaptive Form", () => {
+test.describe("Procurement Automation", () => {
 
-  test("signin with CRED", { tag: ["@smoke"] }, async ({ Then, login }) => {
-    await Then("Login", null, { login });
-    await Then("Credential", null, { login });
-  });
+  test("Singin scenario", { tag: ["@smoke"] }, async ({  }) => {});
 
 });
 
@@ -19,5 +16,5 @@ test.use({
 });
 
 const bddFileMeta = {
-  "signin with CRED": {"pickleLocation":"3:1","tags":["@smoke"]},
+  "Singin scenario": {"pickleLocation":"3:1","tags":["@smoke"]},
 };

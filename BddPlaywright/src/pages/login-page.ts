@@ -1,112 +1,133 @@
 import { BrowserContext, Locator, Page, expect } from "@playwright/test";
-export class Login{
-    page:Page;
-    url:string;
-    username:Locator;
-    password:Locator;
-    loginButton:Locator;
-    text:Locator;
-    leftmenu:Locator
-    menuoption:Locator
-    location:Locator
-    date:Locator
-    draft:Locator
-    ok:Locator
-    leftmenu2:Locator
-    menuoption2:Locator
-    search:Locator
-    filter:Locator
-    dropdown:Locator
-    value:Locator
-    search2:Locator
-    radio:Locator
 
-    constructor(page:Page)
+export class Login {
+    page: Page
+    url: string
+    username: Locator
+    password: Locator
+    card: Locator
+    addbutton: Locator
+    licensetype:Locator
+    itemcategory: Locator
+    itemdescription:Locator
+    quantity:Locator
+    itemUOM:Locator
+    PID:Locator
+    checkbox:Locator
+    radiobutton:Locator
+    radiobutton2:Locator
+    datepicker:Locator
+    currentDay:Locator
+    attachment:Locator
+    attach:Locator
+    file:Locator
+    filetype:Locator
+    uploadbutton:Locator
+
+    constructor(page: Page) {
+        this.page = page;
+        this.url = 'https://procurementqat.caresoftglobal.com/';
+        this.username = this.page.locator('[name="username"]')
+        this.password = this.page.locator('[id="txtPassword"]')
+        this.card = this.page.getByRole('heading', { name: 'Software' })
+        this.addbutton = this.page.locator('#btnadd')
+        this.licensetype=this.page.getByPlaceholder('Please enter License type')
+        this.itemcategory=this.page.locator('[id="ddlItemCategory"]')
+        this.itemdescription=this.page.locator('#ddlItemdescriptions')
+        this.quantity=this.page.locator('#txtQty')
+        this.itemUOM=this.page.locator('[id="ddlQtyUOM"]')
+        this.PID=this.page.locator('[class="multiselect-selected-text"]')
+        this.checkbox=this.page.locator('[type="checkbox"][value="BAYONE13179C000"]')
+        this.radiobutton=this.page.locator('[id="RdnBillabeyes"]')
+        this.radiobutton2=this.page.locator('[id="RdnWorkPlaceCustomer"]')
+        this.datepicker=this.page.locator('[id="txtExpiryDate"]')
+        this.currentDay=this.page.locator('[class="today active start-date active end-date in-range available"]')
+        this.attachment=this.page.locator('[id="btnAttachment"]')
+        this.attach=this.page.locator('[id="fileUpload"]')
+        this.filetype=this.page.locator('#ddlDocType')
+        this.uploadbutton=this.page.locator('#btnUpload')
+    }
+
+    public async login() 
     {
-        this.page=page;
-        this.url = 'https://adaptiveqat.caresoftglobal.com/';
-        this.username=this.page.locator('[id="frmLogin"] [id="txtUserID"][name="username"]').nth(0);
-        this.password=this.page.locator('[id="frmLogin"] [id="txtPassword"][name="password"]').nth(0);
-        this.loginButton=this.page.getByRole('button').filter({hasText:"SIGN IN"}).nth(0)
-        this.text=this.page.getByRole('heading', { name: 'Adaptive Service Management' })
-        this.leftmenu=this.page.locator('[name="Customer Page"]')
-        this.menuoption=this.page.getByRole('link', { name: 'Create Request' })
-        this.location=this.page.locator('[name="Project location"]')
-        this.date=this.page.locator('[name="Work Package Expected delivery date"]')
-        this.draft=this.page.locator('[id="Draft"]')
-        this.ok=this.page.getByRole('button', { name: 'OK' })
-        this.leftmenu2=this.page.locator('[name="Technical Publication"]')
-        this.menuoption2=this.page.locator('[name="Work Assignment"]')     
-        this.search=this.page.locator('input[name=" Work Package name "]').nth(2) 
-        this.filter=this.page.getByRole('button', { name: 'Filter ' }).nth(1)  
-        this.dropdown=this.page.getByRole('textbox', { name: 'Self' })
-        this.value=this.page.getByRole('option', { name: 'All' })   
-        this.search2=this.page.getByRole('button', { name: ' Search' })        
-        this.radio=this.page.locator('input[name="Authoring Location"]').nth(3)
-    }
-
-    public async login(){
-        
+        await this.page.waitForTimeout(5000)            //wait for timeout
         await this.page.goto(this.url);
-        //await this.page.pause()
-        
-        //retry assertion
-        await expect(this.page).toHaveURL(this.url)
-        console.log('passed')
+        await expect(this.page).toHaveURL(this.url)     //retry assertion
+        console.log('Url Matched')
+        await this.page.waitForSelector('this.username')    //wait for selector
+        await expect(this.username).toBeEnabled()       //enabled
+        await this.username.fill('101479')              // locator('[name]')
+        await expect(this.password).not.toBeDisabled()  //not disabled
+        await this.password.fill('Mummy@162')           // locator('[id]')
+        await this.password.press('Enter')              // Keyboard Enter
+        await this.page.waitForLoadState('networkidle') // wait for load state
     }
 
-    public async credential(){
-        //await this.page.waitForTimeout(5000)
-        //await this.page.waitForLoadState('networkidle')
-        await this.username.waitFor({state:'visible'})
-        
-        //non retry assertion
-        await expect(this.text).toContainText('Adaptive Service Management Platform')
-        console.log('text')
-
-        //soft assertion
-        await expect.soft(this.username).toBeEditable()
-        console.log('editable')
-        await this.username.fill('620048');
-
-        //Negating assertion & Hard Assertion
-        await expect.soft(this.password).not.toBeDisabled()
-        console.log('not disabled')
-        await this.password.fill('Test123@');
-        await this.loginButton.click()
-        //await this.page.waitForLoadState('networkidle')
-        await this.page.waitForTimeout(9500)
-        await this.page.pause()
-        //select left menu
-        //await expect(this.leftmenu).toBeEnabled()
-        console.log('button enabled')
-        await this.leftmenu.click()
-        await this.menuoption.click()
-        //await this.page.pause()
-        
-        //add request
-        await this.location.selectOption('Coimbatore')
-        await this.date.fill('07-Aug-2024')
-        await this.draft.click()
-        await this.ok.click()
-        await this.leftmenu2.click()
-        await this.menuoption2.click()
-        await this.search.fill('a0030')
-        await this.filter.click()
-        await this.dropdown.click()
-        await this.value.click()
-        await this.search2.click()
-        //await this.radio.focus()
-        await this.radio.check()
-        await this.page.pause()
-        // await this.page.waitForTimeout(3500)
-        // await this.page.waitForSelector('this.radio')
-        // await this.page.waitForFunction()
-        // const [response] = await
-        // await this.page.waitForRequest()
-        // await this.page.waitForResponse('url', '200')
-        // await this.page.waitForLoadState()
+    public async selectCard() {
+        await this.card.click()                         //getbyRole(role and name)
     }
 
+    public async addRequest() {
+        await this.addbutton.click()                               //css selector(#id)
+        await this.licensetype.fill('Public')                    //placeHolder('text')
+        await this.itemcategory.selectOption('Subscription')     //Dropdown selection using id
+        await this.itemdescription.selectOption('ANSA')            //Dropdown selection using CSS
+        await this.quantity.fill('2')
+        //await this.page.keyboard.press('PageUp')                //--> page up not working(doubt)
+        await this.itemUOM.selectOption('Units')
+        await this.PID.click()                                      
+        await expect(this.checkbox).not.toBeChecked()               //checkbox not to be checked
+        await this.checkbox.check()                                 //checkbox click
+         if(await this.radiobutton.isChecked)                          //if inside if
+         {
+             if(await expect(this.radiobutton2).not.toBeChecked)
+                 {
+                     await this.radiobutton2.check()
+                     console.log('checked')
+                 }
+         }
+        await this.datepicker.focus()                                     //focus
+        await this.currentDay.dblclick()                                  //double click
+        //const datePickerCells = await this.page.$$('.calendar-day')
+        //const numberOfCells = datePickerCells.length;
+        //console.log(numberOfCells)
+        //const today = new Date();                                        //doubt
+        //const currentDay = today.getDate();
+        //for(let i=1; i==currentDay; i++)                    
+        // {
+        //     if(i==currentDay)
+        //     {
+        //         await this.page.locator('cell', {name:'i'})
+        //     }
+        // }
+        // console.log(currentDay)
+        // const cells = await this.page.$$('.calendar-day');
+        // for (let i = 0; i < cells.length; i++) {
+        //     const cellText = await cells[i].innerText(); // Get text of each cell
+        //     if (parseInt(cellText, 10) === currentDay) {
+        //       await cells[i].click();
+        //     }}
+        
+        // const handle = this.attachment
+         
+         await this.attachment.click()
+         await this.filetype.selectOption('Invoice')
+         const fileInput = this.attach
+         //await this.attach.click()
+         await fileInput.setInputFiles('C:/Users/620048/Desktop/BddPlaywright/Testdata/Excel.xlsx')
+         await this.uploadbutton.click()
+         await this.page.pause()
 
+        // await handle.setInputFiles('C:/Users/620048/Desktop/BddPlaywright/Testdata/Excel.xlsx')     // doubts
+        // await this.page.setInputFiles('C:/Users/620048/Desktop/BddPlaywright/Testdata/Excel.xlsx')  // doubts
+        
+        }
+    
 }
+
+
+
+
+
+
+
